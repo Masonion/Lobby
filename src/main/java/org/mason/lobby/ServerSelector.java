@@ -34,11 +34,11 @@ public class ServerSelector implements Listener {
     private void openServerSelector(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.GOLD + "Server Selector");
 
-        Integer uhcPlayerCount = bungee.getServers().get("UHCCommand");
-        Integer arenaPVPPlayerCount = bungee.getServers().get("ArenaCommand");
+        Integer uhcPlayerCount = bungee.getServers().get("UHC");
+        Integer arenaPVPPlayerCount = bungee.getServers().get("Arena");
 
-        ItemStack uhc = createItem(Material.GOLDEN_APPLE, ChatColor.GOLD + "UHCCommand", uhcPlayerCount != null ? uhcPlayerCount : 0);
-        ItemStack arena = createItem(Material.DIAMOND_SWORD, ChatColor.GOLD + "ArenaCommand", arenaPVPPlayerCount != null ? arenaPVPPlayerCount : 0);
+        ItemStack uhc = createItem(Material.GOLDEN_APPLE, ChatColor.GOLD + "UHC", uhcPlayerCount != null ? uhcPlayerCount : 0);
+        ItemStack arena = createItem(Material.DIAMOND_SWORD, ChatColor.GOLD + "Arena", arenaPVPPlayerCount != null ? arenaPVPPlayerCount : 0);
 
         inventory.setItem(0, uhc);
         inventory.setItem(1, arena);
