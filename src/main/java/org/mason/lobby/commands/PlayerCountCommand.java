@@ -12,12 +12,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
 
-public class PlayerCount implements CommandExecutor {
+public class PlayerCountCommand implements CommandExecutor {
 
     private final Bungee bungee;
     private final Lobby lobby;
 
-    public PlayerCount(Lobby lobby, Bungee bungee) {
+    public PlayerCountCommand(Lobby lobby, Bungee bungee) {
         this.lobby = lobby;
         this.bungee = bungee;
     }

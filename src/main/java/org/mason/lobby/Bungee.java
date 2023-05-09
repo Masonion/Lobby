@@ -51,7 +51,7 @@ public class Bungee implements PluginMessageListener {
     public void requestPlayerCount(String server) {
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            out.writeUTF("PlayerCount");
+            out.writeUTF("PlayerCountCommand");
             out.writeUTF(server);
             Player player = Bukkit.getOnlinePlayers().iterator().next();
             player.sendPluginMessage(lobby, "BungeeCord", out.toByteArray());
@@ -68,7 +68,7 @@ public class Bungee implements PluginMessageListener {
                 if (subChannel.equals("GetServers")) {
                     String[] serverArray = in.readUTF().split(", ");
                     serverNames = Set.of(serverArray); // Update serverNames with the new set of server names
-                } else if (subChannel.equals("PlayerCount")) {
+                } else if (subChannel.equals("PlayerCountCommand")) {
                     String server = in.readUTF();
                     int count = in.readInt();
                     servers.put(server, count);

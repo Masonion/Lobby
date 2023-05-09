@@ -2,7 +2,7 @@ package org.mason.lobby;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mason.lobby.commands.PlayerCount;
+import org.mason.lobby.commands.PlayerCountCommand;
 import org.mason.lobby.listeners.PlayerJoinListener;
 import org.mason.lobby.listeners.PlayerMoveListener;
 import org.mason.lobby.listeners.WeatherChangeListener;
@@ -18,7 +18,9 @@ public class Lobby extends JavaPlugin {
     @Override
     public void onEnable() {
         bungee.startTask();
-        getCommand("playercount").setExecutor(new PlayerCount(this, bungee));
+        getCommand("playercount").setExecutor(new PlayerCountCommand(this, bungee));
+        getCommand("uhc").setExecutor(new PlayerCountCommand(this, bungee));
+        getCommand("arena").setExecutor(new PlayerCountCommand(this, bungee));
 
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);

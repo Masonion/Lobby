@@ -5,3 +5,9 @@ commands:
   playercount:
     description: Display the player count on each connected server.
     usage: /playercount
+  uhc:
+    description: Go to UHCCommand server.
+    usage: /uhc
+  arena:
+    description: Go to arena server.
+    usage: /arena
