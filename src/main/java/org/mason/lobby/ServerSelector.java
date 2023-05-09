@@ -35,25 +35,13 @@ public class ServerSelector implements Listener {
         Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.GOLD + "Server Selector");
 
         Integer uhcPlayerCount = bungee.getServers().get("UHC");
-        Integer buildPlayerCount = bungee.getServers().get("build");
-        Integer arenaPVPPlayerCount = bungee.getServers().get("ArenaPVP");
+        Integer arenaPVPPlayerCount = bungee.getServers().get("Arena");
 
         ItemStack uhc = createItem(Material.GOLDEN_APPLE, ChatColor.GOLD + "UHC", uhcPlayerCount != null ? uhcPlayerCount : 0);
-        ItemStack build = createItem(Material.DIRT, ChatColor.GREEN + "Build", buildPlayerCount != null ? buildPlayerCount : 0);
-        ItemStack arenaPVP = createItem(Material.DIAMOND_SWORD, ChatColor.RED + "ArenaPVP", arenaPVPPlayerCount != null ? arenaPVPPlayerCount : 0);
-
-        // Add "Coming Soon" to the lore of the ArenaPVP item
-        if (arenaPVPPlayerCount == null) {
-            List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Coming Soon");
-            ItemMeta meta = arenaPVP.getItemMeta();
-            meta.setLore(lore);
-            arenaPVP.setItemMeta(meta);
-        }
+        ItemStack arena = createItem(Material.DIAMOND_SWORD, ChatColor.GOLD + "Arena", arenaPVPPlayerCount != null ? arenaPVPPlayerCount : 0);
 
         inventory.setItem(0, uhc);
-        inventory.setItem(1, build);
-        inventory.setItem(2, arenaPVP);
+        inventory.setItem(1, arena);
 
         player.openInventory(inventory);
     }
