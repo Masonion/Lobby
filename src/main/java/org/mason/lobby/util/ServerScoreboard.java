@@ -1,0 +1,59 @@
+package org.mason.lobby.util;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.*;
+
+
+import org.mason.lobby.Main;
+
+public class ServerScoreboard {
+    private final Main lobby;
+    private Bungee bungee;
+
+    public ServerScoreboard(Bungee bungee, Main lobby) {
+        this.lobby = lobby;
+        this.bungee = bungee;
+    }
+
+    public void showServerScoreboard(Player player) {
+        Scoreboard scoreboard = ScoreboardUtil.getNewScoreboard(player);
+        Objective objective = ScoreboardUtil.getObjective(scoreboard, "serverInfo", DisplaySlot.SIDEBAR, ChatColor.AQUA + "Akurra Lobby");
+
+        int counter = 1;
+
+        Team addressTeam = scoreboard.registerNewTeam("Address");
+        addressTeam.setSuffix(ChatColor.GRAY + "akurra.net");
+        addressTeam.addEntry(ChatColor.GRAY + "play.");
+        Score addressScore = objective.getScore(ChatColor.GRAY + "play.");
+        addressScore.setScore(counter++);
+
+        Score whitespace1 = objective.getScore(ChatColor.DARK_RED + " ");
+        whitespace1.setScore(counter++);
+
+        Team arenaTeam = scoreboard.registerNewTeam("Arena");
+        arenaTeam.addEntry(ChatColor.AQUA + "Arena: ");
+        Score arenaScore = objective.getScore(ChatColor.AQUA + "Arena: ");
+        arenaScore.setScore(counter++);
+
+        Team uhcTeam = scoreboard.registerNewTeam("UHC");
+        uhcTeam.addEntry(ChatColor.AQUA + "UHC: ");
+        Score uhcScore = objective.getScore(ChatColor.AQUA + "UHC: ");
+        uhcScore.setScore(counter++);
+
+        Score whitespace2 = objective.getScore(ChatColor.RED + " ");
+        whitespace2.setScore(counter++);
+
+
+        player.setScoreboard(scoreboard);
+
+        // Register a new repeating task using Bukkit's scheduler.
+        // This task will run every 30 seconds (20 ticks, since 1 second is approximately 20 ticks).
+        Bukkit.getScheduler().runTaskTimerAsynchronously(lobby, () -> {
+            // Update the suffixes of the teams here.
+            uhcTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("UHC")));
+            arenaTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("Arena")));
+        }, 0L, 20L);
+    }
+}

@@ -1,4 +1,4 @@
-package org.mason.lobby;
+package org.mason.lobby.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,37 +32,48 @@ public class ServerSelector implements Listener {
     }
 
     private void openServerSelector(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.GOLD + "Server Selector");
+        Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Server Selector");
 
-        Integer uhcPlayerCount = bungee.getServers().get("UHC");
-        Integer arenaPVPPlayerCount = bungee.getServers().get("Arena");
+        ItemStack uhc = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "UHC", "UHC");
+        ItemStack arena = createServerItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena", "Arena");
 
-        ItemStack uhc = createItem(Material.GOLDEN_APPLE, ChatColor.GOLD + "UHC", uhcPlayerCount != null ? uhcPlayerCount : 0);
-        ItemStack arena = createItem(Material.DIAMOND_SWORD, ChatColor.GOLD + "Arena", arenaPVPPlayerCount != null ? arenaPVPPlayerCount : 0);
-
-        inventory.setItem(0, uhc);
-        inventory.setItem(1, arena);
+        inventory.setItem(3, uhc);
+        inventory.setItem(5, arena);
 
         player.openInventory(inventory);
     }
 
 
-    private ItemStack createItem(Material material, String name, int playerCount) {
+    private ItemStack createServerItem(Material material, String name, String server) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GREEN + name);
-
+        meta.setDisplayName(name);
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "Players: " + ChatColor.AQUA + playerCount);
+        // Assuming you have bungee instance accessible here
+        Integer playerCount = bungee.getServerPlayerCount(server);
+        lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
         meta.setLore(lore);
 
         item.setItemMeta(meta);
         return item;
     }
 
+    private ItemStack createItem(Material material, String name) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(name);
+        List<String> lore = new ArrayList<>();
+        // Assuming you have bungee instance accessible here
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getView().getTitle().equals(ChatColor.GOLD + "Server Selector")) {
+        if (event.getView().getTitle().equals(ChatColor.AQUA + "Server Selector")) {
             event.setCancelled(true);
 
             ItemStack clickedItem = event.getCurrentItem();

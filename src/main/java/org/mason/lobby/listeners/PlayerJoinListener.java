@@ -14,16 +14,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.mason.lobby.Lobby;
+import org.mason.lobby.Main;
+import org.mason.lobby.util.ServerScoreboard;
 
 import java.util.Random;
 
 public class PlayerJoinListener implements Listener {
 
-    private final Lobby Lobby;
+    private final Main Lobby;
+    private final ServerScoreboard serverScoreboard;
 
-    public PlayerJoinListener(Lobby Lobby) {
+    public PlayerJoinListener(Main Lobby, ServerScoreboard serverScoreboard) {
         this.Lobby = Lobby;
+        this.serverScoreboard = serverScoreboard;
     }
 
     @EventHandler
@@ -44,6 +47,8 @@ public class PlayerJoinListener implements Listener {
 
         player.setWalkSpeed(0.2f);
 
+        serverScoreboard.showServerScoreboard(player);
+
     }
 
     private void giveClock(Player player) {
@@ -51,7 +56,7 @@ public class PlayerJoinListener implements Listener {
         ItemMeta clockMeta = clock.getItemMeta();
         clockMeta.setDisplayName(ChatColor.GREEN + "Server Selector");
         clock.setItemMeta(clockMeta);
-        player.getInventory().setItem(0, clock);
+        player.getInventory().setItem(4, clock);
     }
 
     public void launchFireworksAroundPlayers(Player player) {

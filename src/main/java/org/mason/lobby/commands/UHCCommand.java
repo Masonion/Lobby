@@ -4,14 +4,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.mason.lobby.Bungee;
-import org.mason.lobby.Lobby;
+import org.mason.lobby.util.Bungee;
+import org.mason.lobby.Main;
 
 public class UHCCommand implements CommandExecutor {
     private final String uhcServerName = "UHC";
-    private final Lobby lobby;
+    private final Main lobby;
 
-    public UHCCommand(Lobby lobby) {
+    public UHCCommand(Main lobby) {
         this.lobby = lobby;
     }
 
