@@ -46,6 +46,7 @@ public class PlayerJoinListener implements Listener {
         player.teleport(teleportLocation);
 
         player.setWalkSpeed(0.2f);
+        player.setAllowFlight(true);
 
         serverScoreboard.showServerScoreboard(player);
 

@@ -4,10 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mason.lobby.commands.ArenaCommand;
 import org.mason.lobby.commands.UHCCommand;
 import org.mason.lobby.listeners.*;
-import org.mason.lobby.util.Bungee;
-import org.mason.lobby.util.ScoreboardUtil;
-import org.mason.lobby.util.ServerScoreboard;
-import org.mason.lobby.util.ServerSelector;
+import org.mason.lobby.util.*;
 
 public class Main extends JavaPlugin {
     private final Bungee bungee;
@@ -33,6 +30,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherChangeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDropItemListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerToggleFlightListener(this), this);
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         bungee.startPlayerCountTask("UHC", "Arena");

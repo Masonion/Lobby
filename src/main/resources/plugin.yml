@@ -1,6 +1,6 @@
 name: Lobby
 version: '${project.version}'
-main: org.mason.lobby.Lobby
+main: org.mason.lobby.Main
 commands:
   playercount:
     description: Display the player count on each connected server.
