@@ -1,5 +1,5 @@
 name: Lobby
-version: '${project.version}'
+version: 1.0
 main: org.mason.lobby.Main
 commands:
   playercount:
@@ -10,4 +10,4 @@ commands:
     usage: /uhc
   arena:
     description: Go to arena server.
-    usage: /arena
+    usage: /arena.

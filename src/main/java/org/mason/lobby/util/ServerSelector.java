@@ -19,6 +19,7 @@ import java.util.List;
 public class ServerSelector implements Listener {
 
     private final Bungee bungee;
+    private final String arenaPermission = "lobby.arena.join"; // Define the permission for joining the arena
 
     public ServerSelector(Bungee bungee) {
         this.bungee = bungee;
@@ -36,7 +37,12 @@ public class ServerSelector implements Listener {
         Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Server Selector");
 
         ItemStack uhc = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "UHC", "UHC");
-        ItemStack arena = createServerItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena", "Arena");
+        ItemStack arena;
+        if (player.hasPermission(arenaPermission)) {
+            arena = createServerItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena", "Arena");
+        } else {
+            arena = createItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena Under Construction");
+        }
 
         inventory.setItem(3, uhc);
         inventory.setItem(5, arena);
@@ -64,7 +70,7 @@ public class ServerSelector implements Listener {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         List<String> lore = new ArrayList<>();
-        // Assuming you have bungee instance accessible here
+        lore.add(ChatColor.RED + "Server is under construction");
         meta.setLore(lore);
 
         item.setItemMeta(meta);
@@ -84,6 +90,11 @@ public class ServerSelector implements Listener {
 
             Player player = (Player) event.getWhoClicked();
             String serverName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+
+            if (serverName.equals("Arena") && !player.hasPermission(arenaPermission)) {
+                player.sendMessage(ChatColor.RED + "You do not have permission to join the Arena.");
+                return;
+            }
 
             bungee.sendPlayerToServer(player, serverName);
         }

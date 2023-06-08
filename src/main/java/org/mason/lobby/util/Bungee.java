@@ -38,6 +38,14 @@ public class Bungee implements PluginMessageListener {
         lobby.getServer().sendPluginMessage(lobby, "BungeeCord", out.toByteArray());
     }
 
+    public int getServerPlayerCount(String serverName) {
+        return servers.getOrDefault(serverName, 0);
+    }
+
+    public int getTotalPlayerCount() {
+        return servers.getOrDefault("ALL", 0);
+    }
+
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!channel.equals("BungeeCord")) {
@@ -52,6 +60,10 @@ public class Bungee implements PluginMessageListener {
                 String server = in.readUTF();
                 int playerCount = in.readInt();
                 servers.put(server, playerCount);
+
+                if (server.equals("ALL")) {
+                    servers.put("ALL", playerCount); // Store the total player count
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,12 +77,8 @@ public class Bungee implements PluginMessageListener {
                 for (String serverName : serverNames) {
                     getPlayerCount(serverName);
                 }
+                getPlayerCount("ALL"); // Request total player count
             }
         }.runTaskTimer(lobby, 0L, 20L);  // 20 ticks/second * 30 seconds = 600 ticks
     }
-
-    public int getServerPlayerCount(String serverName) {
-        return servers.getOrDefault(serverName, 0);
-    }
 }
-

@@ -32,7 +32,8 @@ public class PlayerToggleFlightListener implements Listener {
                 event.setCancelled(true);
                 player.setAllowFlight(false);
                 player.setFlying(false);
-                Vector jump = player.getLocation().getDirection().multiply(.5).setY(.5);
+                // Double the X and Z directions (for further) and Y direction (for higher)
+                Vector jump = player.getLocation().getDirection().multiply(1).setY(1);
                 player.setVelocity(player.getVelocity().add(jump));
 
                 // Play the WOOSH sound
@@ -45,7 +46,7 @@ public class PlayerToggleFlightListener implements Listener {
                             player.setAllowFlight(true);
                         }
                     }
-                }.runTaskLater(this.Lobby, 20L);
+                }.runTaskLater(this.Lobby, 10L);
             }
         }
     }

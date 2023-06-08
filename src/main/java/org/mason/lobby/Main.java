@@ -1,5 +1,7 @@
 package org.mason.lobby;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mason.lobby.commands.ArenaCommand;
 import org.mason.lobby.commands.UHCCommand;

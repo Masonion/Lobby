@@ -32,8 +32,6 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
 
-        event.setJoinMessage(null);
-
         Player player = event.getPlayer();
         Location location = player.getLocation();
 

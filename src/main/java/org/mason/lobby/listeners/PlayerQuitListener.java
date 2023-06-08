@@ -12,7 +12,5 @@ public class PlayerQuitListener implements Listener {
         Player player = event.getPlayer();
 
         player.getInventory().clear();
-
-        event.setQuitMessage(null);
     }
 }

@@ -33,17 +33,25 @@ public class ServerScoreboard {
         whitespace1.setScore(counter++);
 
         Team arenaTeam = scoreboard.registerNewTeam("Arena");
-        arenaTeam.addEntry(ChatColor.AQUA + "Arena: ");
-        Score arenaScore = objective.getScore(ChatColor.AQUA + "Arena: ");
+        arenaTeam.addEntry(ChatColor.AQUA + "Arena" + ChatColor.GRAY + ": ");
+        Score arenaScore = objective.getScore(ChatColor.AQUA + "Arena" + ChatColor.GRAY + ": ");
         arenaScore.setScore(counter++);
 
         Team uhcTeam = scoreboard.registerNewTeam("UHC");
-        uhcTeam.addEntry(ChatColor.AQUA + "UHC: ");
-        Score uhcScore = objective.getScore(ChatColor.AQUA + "UHC: ");
+        uhcTeam.addEntry(ChatColor.AQUA + "UHC" + ChatColor.GRAY + ": ");
+        Score uhcScore = objective.getScore(ChatColor.AQUA + "UHC" + ChatColor.GRAY + ": ");
         uhcScore.setScore(counter++);
 
-        Score whitespace2 = objective.getScore(ChatColor.RED + " ");
+        Score whitespace2 = objective.getScore(ChatColor.AQUA + " ");
         whitespace2.setScore(counter++);
+
+        Team totalTeam = scoreboard.registerNewTeam("Online");
+        totalTeam.addEntry(ChatColor.AQUA + "Online" + ChatColor.GRAY + ": ");
+        Score totalScore = objective.getScore(ChatColor.AQUA + "Online" + ChatColor.GRAY + ": ");
+        totalScore.setScore(counter++);
+
+        Score whitespace3 = objective.getScore(ChatColor.RED + " ");
+        whitespace3.setScore(counter++);
 
 
         player.setScoreboard(scoreboard);
@@ -54,6 +62,8 @@ public class ServerScoreboard {
             // Update the suffixes of the teams here.
             uhcTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("UHC")));
             arenaTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("Arena")));
+            totalTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getTotalPlayerCount()));
+
         }, 0L, 20L);
     }
 }
