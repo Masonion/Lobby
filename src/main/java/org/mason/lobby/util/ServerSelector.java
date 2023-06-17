@@ -37,12 +37,12 @@ public class ServerSelector implements Listener {
     private void openServerSelector(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 9, ChatColor.AQUA + "Server Selector");
 
-        ItemStack uhc = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "1.8 UHC", "UHC");
+        ItemStack uhc = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "1.8 UHC", "UHC", player);
         ItemStack arena;
-        arena = createServerItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena", "Arena");
+        arena = createServerItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena", "Arena", player);
 
         ItemStack UHC_NEW;
-        UHC_NEW = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "1.20 UHC", "UHC_NEW");
+        UHC_NEW = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "1.20 UHC", "UHC_NEW", player);
 
         inventory.setItem(3, uhc);
         inventory.setItem(4, UHC_NEW);
@@ -52,14 +52,28 @@ public class ServerSelector implements Listener {
     }
 
 
-    private ItemStack createServerItem(Material material, String name, String server) {
+    private ItemStack createServerItem(Material material, String name, String server, Player player) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         List<String> lore = new ArrayList<>();
         // Assuming you have bungee instance accessible here
         Integer playerCount = bungee.getServerPlayerCount(server);
-        lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+        if (server == "UHC_NEW") {
+            if (!player.hasPermission(newUHCPermission)) {
+                lore.add(ChatColor.RED + "Server is under construction");
+            } else {
+                lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+            }
+        }
+
+        if (server == "Arena") {
+            if (!player.hasPermission(arenaPermission)) {
+                lore.add(ChatColor.RED + "Server is under construction");
+            } else {
+                lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+            }
+        }
         meta.setLore(lore);
 
         item.setItemMeta(meta);
@@ -71,7 +85,6 @@ public class ServerSelector implements Listener {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.RED + "Server is under construction");
         meta.setLore(lore);
 
         item.setItemMeta(meta);
