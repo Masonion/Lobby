@@ -44,42 +44,51 @@ public class ServerSelector implements Listener {
         ItemStack UHC_NEW;
         UHC_NEW = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "1.20 UHC", "UHC_NEW", player);
 
-        inventory.setItem(3, uhc);
-        inventory.setItem(4, UHC_NEW);
-        inventory.setItem(5, arena);
+        inventory.setItem(2, UHC_NEW);
+        inventory.setItem(4, uhc);
+        inventory.setItem(6, arena);
 
         player.openInventory(inventory);
     }
 
 
     private ItemStack createServerItem(Material material, String name, String server, Player player) {
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
+        ItemStack item;
+        ItemMeta meta;
         List<String> lore = new ArrayList<>();
         // Assuming you have bungee instance accessible here
         Integer playerCount = bungee.getServerPlayerCount(server);
-        if (server == "UHC_NEW") {
+
+        if (server.equals("UHC_NEW")) {
             if (!player.hasPermission(newUHCPermission)) {
+                item = new ItemStack(Material.BARRIER);
+                meta = item.getItemMeta();
                 lore.add(ChatColor.RED + "Server is under construction");
             } else {
+                item = new ItemStack(material);
+                meta = item.getItemMeta();
                 lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
             }
-        }
-
-        if (server == "Arena") {
+        } else if (server.equals("Arena")) {
             if (!player.hasPermission(arenaPermission)) {
+                item = new ItemStack(Material.BARRIER);
+                meta = item.getItemMeta();
                 lore.add(ChatColor.RED + "Server is under construction");
             } else {
+                item = new ItemStack(material);
+                meta = item.getItemMeta();
                 lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
             }
+        } else {
+            item = new ItemStack(material);
+            meta = item.getItemMeta();
         }
-        meta.setLore(lore);
 
+        meta.setDisplayName(name);
+        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
-
     private ItemStack createItem(Material material, String name) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

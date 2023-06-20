@@ -37,7 +37,7 @@ public class PlayerJoinListener implements Listener {
 
         giveClock(event.getPlayer());
         launchFireworksAroundPlayers(event.getPlayer());
-        Location teleportLocation = new Location(location.getWorld(), -0.5, 101, 0.5);
+        Location teleportLocation = new Location(location.getWorld(), 5, 87, 29);
         player.teleport(teleportLocation);
 
         teleportLocation.setYaw(180);
