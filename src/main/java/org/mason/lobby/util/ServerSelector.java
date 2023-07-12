@@ -70,16 +70,16 @@ public class ServerSelector implements Listener {
                 lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
             }
         } else if (server.equals("Arena")) {
-            if (!player.hasPermission(arenaPermission)) {
-                item = new ItemStack(Material.BARRIER);
-                meta = item.getItemMeta();
-                lore.add(ChatColor.RED + "Server is under construction");
-            } else {
-                item = new ItemStack(material);
-                meta = item.getItemMeta();
-                lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
-            }
-        } else {
+            item = new ItemStack(material);
+            meta = item.getItemMeta();
+            lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+        } else if (server.equals("UHC")) {
+            item = new ItemStack(material);
+            meta = item.getItemMeta();
+            lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+        }
+
+        else {
             item = new ItemStack(material);
             meta = item.getItemMeta();
         }
@@ -114,10 +114,6 @@ public class ServerSelector implements Listener {
             Player player = (Player) event.getWhoClicked();
             String serverName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
 
-            if (serverName.equals("Arena") && !player.hasPermission(arenaPermission)) {
-                player.sendMessage(ChatColor.RED + "You do not have permission to join the Arena.");
-                return;
-            }
 
             if (serverName.equals("1.8 UHC")) {
                 serverName = "UHC";

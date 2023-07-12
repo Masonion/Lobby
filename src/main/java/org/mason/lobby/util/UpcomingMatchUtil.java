@@ -32,7 +32,7 @@ public class UpcomingMatchUtil {
     }
 
     public String checkUpcomingGamesAndPrint() {
-        String sql = "SELECT * FROM uhc_calendar WHERE unix_time > UNIX_TIMESTAMP() ORDER BY unix_time ASC LIMIT 1";
+        String sql = "SELECT * FROM uhc_calendar WHERE unix_time > (UNIX_TIMESTAMP() - 1500) ORDER BY unix_time ASC LIMIT 1";
 
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -40,20 +40,20 @@ public class UpcomingMatchUtil {
             if (resultSet.next()) {
                 StringBuilder builder = new StringBuilder();
 
-                builder.append(ChatColor.RED).append("Time: ")
-                        .append(ChatColor.WHITE).append(getTimeUntil(resultSet.getLong("unix_time"))).append("\n");
-
-                builder.append(ChatColor.AQUA).append("Version: ")
-                        .append(ChatColor.WHITE).append(resultSet.getString("version")).append("\n");
-
-                builder.append(ChatColor.AQUA).append("Host: ")
+                builder.append(ChatColor.AQUA).append("Host" + ChatColor.GRAY + ": ")
                         .append(ChatColor.WHITE).append(resultSet.getString("host")).append("\n");
 
-                builder.append(ChatColor.AQUA).append("Scenarios: ")
-                        .append(ChatColor.WHITE).append(formatScenarios(resultSet.getString("scenarios")).toString()).append("\n");
+                builder.append(ChatColor.AQUA).append("Time (Sydney)" + ChatColor.GRAY + ": ")
+                        .append(ChatColor.WHITE).append(getTimeUntil(resultSet.getLong("unix_time")).replaceAll("\n", "\n" + ChatColor.GRAY + ChatColor.ITALIC)).append("\n");
 
-                builder.append(ChatColor.AQUA).append("Team size: ")
-                        .append(ChatColor.WHITE).append(getTeamSize(resultSet.getInt("team_size")));
+                builder.append(ChatColor.AQUA).append("Version" + ChatColor.GRAY + ": ")
+                        .append(ChatColor.WHITE).append(resultSet.getString("version")).append("\n");
+
+                builder.append(ChatColor.AQUA).append("Team" + ChatColor.GRAY + ": ")
+                        .append(ChatColor.WHITE).append(getTeamSize(resultSet.getInt("team_size"))).append("\n");
+
+                builder.append(ChatColor.AQUA).append("Scenarios" + ChatColor.GRAY + ": ")
+                        .append(ChatColor.WHITE).append(String.join("\n", formatScenarios(resultSet.getString("scenarios"))));
 
                 return builder.toString();
             }
@@ -86,18 +86,29 @@ public class UpcomingMatchUtil {
         String formattedTime = sdf.format(matchTime.getTime());
         String timeRemaining = "";
 
-        if (timeDifference < 3600) {
+        if (timeDifference < 0) {
+            // Game has started
+            long timeSinceStart = Math.abs(timeDifference);
+            if (timeSinceStart < 3600) {
+                // Less than an hour
+                timeRemaining = timeSinceStart / 60 + " minutes since start";
+            } else {
+                // Hour or more
+                long hours = timeSinceStart / 3600;
+                long minutes = (timeSinceStart % 3600) / 60;
+                timeRemaining = hours + " hour" + (hours > 1 ? "s" : "") + " and " + minutes + " minute" + (minutes > 1 ? "s" : "") + " since start";
+            }
+        } else if (timeDifference < 3600) {
             // Less than an hour
-            timeRemaining = timeDifference / 60 + " minutes";
-        } else if (timeDifference < 86400) {
-            // Less than a day
-            timeRemaining = timeDifference / 3600 + " hours";
+            timeRemaining = timeDifference / 60 + " minutes until start";
         } else {
-            // More than a day
-            timeRemaining = timeDifference / 86400 + " days";
+            // Hour or more
+            long hours = timeDifference / 3600;
+            long minutes = (timeDifference % 3600) / 60;
+            timeRemaining = hours + " hour" + (hours > 1 ? "s" : "") + " and " + minutes + " minute" + (minutes > 1 ? "s" : "");
         }
 
-        return formattedTime + " (In " + timeRemaining + ")";
+        return formattedTime + "\n(" + timeRemaining + ")";
     }
 
     private List<String> formatScenarios(String scenarios) {
@@ -107,7 +118,7 @@ public class UpcomingMatchUtil {
         int lineLength = 0;
         StringBuilder line = new StringBuilder();
         for (String scenario : scenarioArray) {
-            if (lineLength < 4) {
+            if (lineLength < 2) {
                 if (lineLength > 0) {
                     line.append(", ");
                 }

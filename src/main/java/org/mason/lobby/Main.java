@@ -1,6 +1,9 @@
 package org.mason.lobby;
 
 import net.citizensnpcs.Citizens;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mason.lobby.Data.NPCDataStore;
 import org.mason.lobby.commands.*;
@@ -11,6 +14,7 @@ public class Main extends JavaPlugin {
     private final Bungee bungee;
     private ServerScoreboard serverScoreboard;
     private Citizens citizens;
+    private MatchHologram matchHologram;
 
     public Main() {
         bungee = new Bungee(this);
@@ -35,6 +39,13 @@ public class Main extends JavaPlugin {
 
         UpcomingMatchUtil upcomingMatchUtil = new UpcomingMatchUtil();
         this.getCommand("upcomingmatch").setExecutor(new UpcomingMatchCommand(upcomingMatchUtil));
+
+        // Create the match hologram
+        // You'll need to replace these coordinates with the location where you want the hologram
+        World world = Bukkit.getWorld("airlobby");
+        Location hologramLocation = new Location(world, 5, 88, 12.5);
+        matchHologram = new MatchHologram(this, upcomingMatchUtil);
+        matchHologram.showUpcomingMatches(hologramLocation);
 
         getCommand("arena").setExecutor(new ArenaCommand(this));
         getCommand("uhc").setExecutor(new UHCCommand(this));

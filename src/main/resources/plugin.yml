@@ -1,6 +1,7 @@
 name: Lobby
 version: 1.0
 main: org.mason.lobby.Main
+depend: [Citizens, HolographicDisplays]
 commands:
   playercount:
     description: Display the player count on each connected server.
