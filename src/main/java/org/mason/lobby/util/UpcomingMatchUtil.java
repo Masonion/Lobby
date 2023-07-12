@@ -38,6 +38,7 @@ public class UpcomingMatchUtil {
             ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet.next()) {
+                String region = resultSet.getString("region");
                 StringBuilder builder = new StringBuilder();
 
                 builder.append(ChatColor.AQUA).append("Host" + ChatColor.GRAY + ": ")
