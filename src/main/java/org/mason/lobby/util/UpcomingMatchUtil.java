@@ -37,8 +37,13 @@ public class UpcomingMatchUtil {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 String region = resultSet.getString("region");
+
+                if (!"AU".equalsIgnoreCase(region)) {
+                    continue;
+                }
+
                 StringBuilder builder = new StringBuilder();
 
                 builder.append(ChatColor.AQUA).append("Host" + ChatColor.GRAY + ": ")
@@ -61,7 +66,6 @@ public class UpcomingMatchUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
