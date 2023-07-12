@@ -32,18 +32,13 @@ public class UpcomingMatchUtil {
     }
 
     public String checkUpcomingGamesAndPrint() {
-        String sql = "SELECT * FROM uhc_calendar WHERE unix_time > (UNIX_TIMESTAMP() - 1500) ORDER BY unix_time ASC LIMIT 1";
+        String sql = "SELECT * FROM uhc_calendar WHERE unix_time > (UNIX_TIMESTAMP() - 1500) AND region = 'AU' ORDER BY unix_time ASC LIMIT 1";
 
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
 
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 String region = resultSet.getString("region");
-
-                if (!"AU".equalsIgnoreCase(region)) {
-                    continue;
-                }
-
                 StringBuilder builder = new StringBuilder();
 
                 builder.append(ChatColor.AQUA).append("Host" + ChatColor.GRAY + ": ")
@@ -66,6 +61,7 @@ public class UpcomingMatchUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
