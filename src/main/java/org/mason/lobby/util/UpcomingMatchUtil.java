@@ -38,7 +38,6 @@ public class UpcomingMatchUtil {
             ResultSet resultSet = statement.executeQuery(sql);
 
             if (resultSet.next()) {
-                String region = resultSet.getString("region");
                 StringBuilder builder = new StringBuilder();
 
                 builder.append(ChatColor.AQUA).append("Host" + ChatColor.GRAY + ": ")
@@ -48,9 +47,11 @@ public class UpcomingMatchUtil {
                         .append(ChatColor.WHITE).append(getTimeUntil(resultSet.getLong("unix_time")).replaceAll("\n", "\n" + ChatColor.GRAY + ChatColor.ITALIC)).append("\n");
 
                 builder.append(ChatColor.AQUA).append("Version" + ChatColor.GRAY + ": ")
-                        .append(ChatColor.WHITE).append(resultSet.getString("version")).append("\n");
+                        .append(ChatColor.WHITE).append(resultSet.getString("version")).append(" ");
 
-                builder.append(ChatColor.AQUA).append("Team" + ChatColor.GRAY + ": ")
+                builder.append(ChatColor.AQUA).append("Region" + ChatColor.GRAY + ": ").append(ChatColor.WHITE).append(resultSet.getString("region")).append("\n");
+
+                builder.append(ChatColor.AQUA).append("Team Size" + ChatColor.GRAY + ": ")
                         .append(ChatColor.WHITE).append(getTeamSize(resultSet.getInt("team_size"))).append("\n");
 
                 builder.append(ChatColor.AQUA).append("Scenarios" + ChatColor.GRAY + ": ")
@@ -92,21 +93,26 @@ public class UpcomingMatchUtil {
             long timeSinceStart = Math.abs(timeDifference);
             if (timeSinceStart < 3600) {
                 // Less than an hour
-                timeRemaining = timeSinceStart / 60 + " minutes since start";
+                timeRemaining = timeSinceStart / 60 > 0 ? timeSinceStart / 60 + " minutes since start" : "";
             } else {
                 // Hour or more
                 long hours = timeSinceStart / 3600;
                 long minutes = (timeSinceStart % 3600) / 60;
-                timeRemaining = hours + " hour" + (hours > 1 ? "s" : "") + " and " + minutes + " minute" + (minutes > 1 ? "s" : "") + " since start";
+                timeRemaining = (hours > 0 ? hours + " hour" + (hours > 1 ? "s" : "") : "")
+                        + (hours > 0 && minutes > 0 ? " and " : "")
+                        + (minutes > 0 ? minutes + " minute" + (minutes > 1 ? "s" : "") : "")
+                        + " since start";
             }
         } else if (timeDifference < 3600) {
             // Less than an hour
-            timeRemaining = timeDifference / 60 + " minutes until start";
+            timeRemaining = timeDifference / 60 > 0 ? timeDifference / 60 + " minutes until start" : "";
         } else {
             // Hour or more
             long hours = timeDifference / 3600;
             long minutes = (timeDifference % 3600) / 60;
-            timeRemaining = hours + " hour" + (hours > 1 ? "s" : "") + " and " + minutes + " minute" + (minutes > 1 ? "s" : "");
+            timeRemaining = (hours > 0 ? hours + " hour" + (hours > 1 ? "s" : "") : "")
+                    + (hours > 0 && minutes > 0 ? " and " : "")
+                    + (minutes > 0 ? minutes + " minute" + (minutes > 1 ? "s" : "") : "");
         }
 
         return formattedTime + "\n(" + timeRemaining + ")";
