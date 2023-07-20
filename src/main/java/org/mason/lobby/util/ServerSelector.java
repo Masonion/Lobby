@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.mason.lobby.util.Bungee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +20,11 @@ public class ServerSelector implements Listener {
     private final Bungee bungee;
     private final String arenaPermission = "lobby.arena.join"; // Define the permission for joining the arena
     private final String newUHCPermission = "lobby.newuhc.join"; // Define the permission for joining the arena
+    private final UpcomingMatchUtil upcomingMatchUtil;
 
-    public ServerSelector(Bungee bungee) {
+    public ServerSelector(Bungee bungee, UpcomingMatchUtil upcomingMatchUtil) {
         this.bungee = bungee;
+        this.upcomingMatchUtil = upcomingMatchUtil;
     }
 
     @EventHandler
@@ -55,6 +56,7 @@ public class ServerSelector implements Listener {
     private ItemStack createServerItem(Material material, String name, String server, Player player) {
         ItemStack item;
         ItemMeta meta;
+        String currentMatches = upcomingMatchUtil.checkUpcomingGamesAndPrint();
         List<String> lore = new ArrayList<>();
         // Assuming you have bungee instance accessible here
         Integer playerCount = bungee.getServerPlayerCount(server);
@@ -77,6 +79,15 @@ public class ServerSelector implements Listener {
             item = new ItemStack(material);
             meta = item.getItemMeta();
             lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+            // If currentMatches is null or empty, set it to "No upcoming matches"
+            if (currentMatches == null || currentMatches.isEmpty()) {
+                lore.add(ChatColor.RED + "No upcoming matches at the moment.");
+            } else {
+                String[] matchArray = currentMatches.split("\n");
+                for (String match : matchArray) {
+                    lore.add(match);
+                }
+            }
         }
 
         else {
@@ -89,6 +100,7 @@ public class ServerSelector implements Listener {
         item.setItemMeta(meta);
         return item;
     }
+
     private ItemStack createItem(Material material, String name) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

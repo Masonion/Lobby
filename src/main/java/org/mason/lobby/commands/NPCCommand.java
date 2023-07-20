@@ -36,11 +36,6 @@ public class NPCCommand implements CommandExecutor {
             NPC npc = npcRegistry.createNPC(EntityType.PLAYER, args[1]);
             npc.spawn(((Player) sender).getLocation());
 
-            // Add the LookClose trait to make the NPC look at players
-            LookClose lookClose = new LookClose();
-            lookClose.lookClose(true);
-            npc.addTrait(lookClose);
-
             // Store the server name in the NPC's data
             npc.data().set("serverName", args[3]);
             npcDataStore.setServerName(npc.getId(), args[3]);
@@ -52,7 +47,7 @@ public class NPCCommand implements CommandExecutor {
             return true;
         }
 
-        sender.sendMessage("Incorrect command syntax. Use: /npc create <name> <skin-name> <server-name>");
+        sender.sendMessage("Incorrect command syntax. Use: /mnpc create <name> <skin-name> <server-name>");
         return true;
     }
 }

@@ -25,8 +25,8 @@ public class ServerScoreboard {
 
         Team addressTeam = scoreboard.registerNewTeam("Address");
         addressTeam.setSuffix(ChatColor.GRAY + "akurra.net");
-        addressTeam.addEntry(ChatColor.GRAY + "play.");
-        Score addressScore = objective.getScore(ChatColor.GRAY + "play.");
+        addressTeam.addEntry(ChatColor.GRAY + "au.");
+        Score addressScore = objective.getScore(ChatColor.GRAY + "au.");
         addressScore.setScore(counter++);
 
         Score whitespace1 = objective.getScore(ChatColor.DARK_RED + " ");

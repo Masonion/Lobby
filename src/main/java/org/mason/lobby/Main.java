@@ -53,7 +53,7 @@ public class Main extends JavaPlugin {
         // Initialize NPCDataStore
         NPCDataStore npcDataStore = new NPCDataStore(this);
 
-        getCommand("npc").setExecutor(new NPCCommand(citizens, npcDataStore));
+        getCommand("mnpc").setExecutor(new NPCCommand(citizens, npcDataStore));
         getCommand("listnpcs").setExecutor(new ListNPCsCommand(citizens, npcDataStore));
         getCommand("deletenpc").setExecutor(new DeleteNPCCommand(citizens, npcDataStore));
 
@@ -70,7 +70,7 @@ public class Main extends JavaPlugin {
         bungee.startPlayerCountTask("UHC", "Arena");
 
         // Initialize ServerSelector and register events
-        ServerSelector serverSelector = new ServerSelector(bungee);
+        ServerSelector serverSelector = new ServerSelector(bungee, upcomingMatchUtil);
         getServer().getPluginManager().registerEvents(serverSelector, this);
     }
 }

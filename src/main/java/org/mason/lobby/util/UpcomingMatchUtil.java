@@ -93,7 +93,7 @@ public class UpcomingMatchUtil {
             long timeSinceStart = Math.abs(timeDifference);
             if (timeSinceStart < 3600) {
                 // Less than an hour
-                timeRemaining = timeSinceStart / 60 > 0 ? timeSinceStart / 60 + " minutes since start" : "";
+                timeRemaining = timeSinceStart / 60 > 0 ? timeSinceStart / 60 + " minutes since opened" : "";
             } else {
                 // Hour or more
                 long hours = timeSinceStart / 3600;
@@ -105,7 +105,7 @@ public class UpcomingMatchUtil {
             }
         } else if (timeDifference < 3600) {
             // Less than an hour
-            timeRemaining = timeDifference / 60 > 0 ? timeDifference / 60 + " minutes until start" : "";
+            timeRemaining = timeDifference / 60 > 0 ? timeDifference / 60 + " minutes" : "";
         } else {
             // Hour or more
             long hours = timeDifference / 3600;

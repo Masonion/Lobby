@@ -10,7 +10,7 @@ commands:
     description: Arena command
   uhc:
     description: UHC command
-  npc:
+  mnpc:
     description: NPC command
   listnpcs:
     description: List NPCs command
