@@ -124,12 +124,19 @@ public class UpcomingMatchUtil {
 
         int lineLength = 0;
         StringBuilder line = new StringBuilder();
-        for (String scenario : scenarioArray) {
+        for (int i = 0; i < scenarioArray.length; i++) {
+            String scenario = scenarioArray[i];
             if (lineLength < 2) {
                 if (lineLength > 0) {
                     line.append(", ");
                 }
                 line.append(scenario.trim());
+
+                // If this is not the last scenario in the line, append a comma
+                if (lineLength == 1 && i != scenarioArray.length - 1) {
+                    line.append(",");
+                }
+
                 lineLength++;
             } else {
                 formattedScenarios.add(line.toString());

@@ -33,21 +33,21 @@ public class ServerScoreboard {
         whitespace1.setScore(counter++);
 
         Team arenaTeam = scoreboard.registerNewTeam("Arena");
-        arenaTeam.addEntry(ChatColor.AQUA + "Arena" + ChatColor.GRAY + ": ");
-        Score arenaScore = objective.getScore(ChatColor.AQUA + "Arena" + ChatColor.GRAY + ": ");
+        arenaTeam.addEntry(ChatColor.AQUA + "Arena: ");
+        Score arenaScore = objective.getScore(ChatColor.AQUA + "Arena: ");
         arenaScore.setScore(counter++);
 
         Team uhcTeam = scoreboard.registerNewTeam("UHC");
-        uhcTeam.addEntry(ChatColor.AQUA + "UHC" + ChatColor.GRAY + ": ");
-        Score uhcScore = objective.getScore(ChatColor.AQUA + "UHC" + ChatColor.GRAY + ": ");
+        uhcTeam.addEntry(ChatColor.AQUA + "UHC: ");
+        Score uhcScore = objective.getScore(ChatColor.AQUA + "UHC: ");
         uhcScore.setScore(counter++);
 
         Score whitespace2 = objective.getScore(ChatColor.AQUA + " ");
         whitespace2.setScore(counter++);
 
         Team totalTeam = scoreboard.registerNewTeam("Online");
-        totalTeam.addEntry(ChatColor.AQUA + "Online" + ChatColor.GRAY + ": ");
-        Score totalScore = objective.getScore(ChatColor.AQUA + "Online" + ChatColor.GRAY + ": ");
+        totalTeam.addEntry(ChatColor.AQUA + "Online: ");
+        Score totalScore = objective.getScore(ChatColor.AQUA + "Online: ");
         totalScore.setScore(counter++);
 
         Score whitespace3 = objective.getScore(ChatColor.RED + " ");

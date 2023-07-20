@@ -79,13 +79,15 @@ public class ServerSelector implements Listener {
             item = new ItemStack(material);
             meta = item.getItemMeta();
             lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
+            lore.add("");
+            lore.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "Upcoming Game:");
             // If currentMatches is null or empty, set it to "No upcoming matches"
             if (currentMatches == null || currentMatches.isEmpty()) {
                 lore.add(ChatColor.RED + "No upcoming matches at the moment.");
             } else {
                 String[] matchArray = currentMatches.split("\n");
                 for (String match : matchArray) {
-                    lore.add(match);
+                    lore.add(ChatColor.WHITE + match);
                 }
             }
         }
