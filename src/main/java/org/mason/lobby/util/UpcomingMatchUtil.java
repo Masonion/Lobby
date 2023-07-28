@@ -91,9 +91,12 @@ public class UpcomingMatchUtil {
         if (timeDifference < 0) {
             // Game has started
             long timeSinceStart = Math.abs(timeDifference);
-            if (timeSinceStart < 3600) {
-                // Less than an hour
-                timeRemaining = timeSinceStart / 60 > 0 ? timeSinceStart / 60 + " minutes since opened" : "";
+            if (timeSinceStart < 60) {
+                // Less than a minute
+                timeRemaining = timeSinceStart + " seconds since start";
+            } else if (timeSinceStart < 3600) {
+                // Less than an hour but more than a minute
+                timeRemaining = timeSinceStart / 60 + " minutes since start";
             } else {
                 // Hour or more
                 long hours = timeSinceStart / 3600;
@@ -103,9 +106,12 @@ public class UpcomingMatchUtil {
                         + (minutes > 0 ? minutes + " minute" + (minutes > 1 ? "s" : "") : "")
                         + " since start";
             }
+        } else if (timeDifference < 60) {
+            // Less than a minute
+            timeRemaining = timeDifference + " seconds";
         } else if (timeDifference < 3600) {
-            // Less than an hour
-            timeRemaining = timeDifference / 60 > 0 ? timeDifference / 60 + " minutes" : "";
+            // Less than an hour but more than a minute
+            timeRemaining = timeDifference / 60 + " minutes";
         } else {
             // Hour or more
             long hours = timeDifference / 3600;

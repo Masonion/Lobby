@@ -35,8 +35,8 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
         Location location = player.getLocation();
 
-        giveClock(event.getPlayer());
-        launchFireworksAroundPlayers(event.getPlayer());
+        giveClock(player);
+        launchFireworksAroundPlayers(player);
         Location teleportLocation = new Location(location.getWorld(), 5, 87, 29);
         player.teleport(teleportLocation);
 
@@ -59,41 +59,48 @@ public class PlayerJoinListener implements Listener {
     }
 
     public void launchFireworksAroundPlayers(Player player) {
-        if (player != null && !player.isDead()) {
-            final Location location = player.getLocation();
 
-            // Launch fireworks one by one in a circle around the player
-            final int numFireworks = 4;
-            final double initialRadius = 2;
-            final double increment = (2 * Math.PI) / (numFireworks / 10);
+        // Start a BukkitRunnable with delay to fetch the player's location
+        new BukkitRunnable() {
+            @Override
+            public void run() {
 
-            new BukkitRunnable() {
-                int count = 0;
+                // Define spiral parameters
+                final int numFireworks = 10;
+                final double radiusIncrement = 0.2; // Increase this to widen the spiral
+                final double angleIncrement = (2 * Math.PI) / numFireworks;
+                final Location location = player.getLocation();
 
-                @Override
-                public void run() {
-                    if (count >= numFireworks) {
-                        cancel();
-                        return;
+                new BukkitRunnable() {
+
+                    int count = 0;
+
+                    @Override
+                    public void run() {
+                        if (count >= numFireworks) {
+                            cancel();
+                            return;
+                        }
+
+                        double angle = count * angleIncrement;
+                        // The radius now increases with each firework, creating a spiral
+                        double radius = count * radiusIncrement;
+                        double x = location.getX() + (radius * Math.cos(angle));
+                        double z = location.getZ() + (radius * Math.sin(angle));
+                        Location fireworkLocation = new Location(location.getWorld(), x, location.getY() + 1, z);
+                        Firework firework = location.getWorld().spawn(fireworkLocation, Firework.class);
+                        FireworkMeta fireworkMeta = firework.getFireworkMeta();
+
+                        // Randomize the color
+                        Color randomColor = Color.fromRGB(new Random().nextInt(256), new Random().nextInt(256), new Random().nextInt(256));
+
+                        fireworkMeta.addEffect(FireworkEffect.builder().withColor(randomColor).with(FireworkEffect.Type.BURST).withFlicker().build());
+                        fireworkMeta.setPower(1);
+                        firework.setFireworkMeta(fireworkMeta);
+                        count++;
                     }
-
-                    double radius = initialRadius + count * 0.05;
-                    double angle = count * increment;
-                    double x = location.getX() + (radius * Math.cos(angle));
-                    double z = location.getZ() + (radius * Math.sin(angle));
-                    Location fireworkLocation = new Location(location.getWorld(), x, location.getY() + 1, z);
-                    Firework firework = location.getWorld().spawn(fireworkLocation, Firework.class);
-                    FireworkMeta fireworkMeta = firework.getFireworkMeta();
-
-                    // Randomize the color
-                    Color randomColor = Color.fromRGB(new Random().nextInt(256), new Random().nextInt(256), new Random().nextInt(256));
-
-                    fireworkMeta.addEffect(FireworkEffect.builder().withColor(randomColor).with(FireworkEffect.Type.BURST).withFlicker().build());
-                    fireworkMeta.setPower(1);
-                    firework.setFireworkMeta(fireworkMeta);
-                    count++;
-                }
-            }.runTaskTimer(Lobby, 0L, 3L); // Launch a firework every 5 ticks (1/4 second)
-        }
+                }.runTaskTimer(Lobby, 0L, 3L); // Launch a firework every 3 ticks
+            }
+        }.runTaskLater(Lobby, 15L); // Delay before getting the player's location
     }
 }

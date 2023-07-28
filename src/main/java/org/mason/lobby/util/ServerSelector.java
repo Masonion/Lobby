@@ -19,7 +19,6 @@ public class ServerSelector implements Listener {
 
     private final Bungee bungee;
     private final String arenaPermission = "lobby.arena.join"; // Define the permission for joining the arena
-    private final String newUHCPermission = "lobby.newuhc.join"; // Define the permission for joining the arena
     private final UpcomingMatchUtil upcomingMatchUtil;
 
     public ServerSelector(Bungee bungee, UpcomingMatchUtil upcomingMatchUtil) {
@@ -42,12 +41,8 @@ public class ServerSelector implements Listener {
         ItemStack arena;
         arena = createServerItem(Material.DIAMOND_SWORD, ChatColor.AQUA + "Arena", "Arena", player);
 
-        ItemStack UHC_NEW;
-        UHC_NEW = createServerItem(Material.GOLDEN_APPLE, ChatColor.AQUA + "1.20 UHC", "UHC_NEW", player);
-
-        inventory.setItem(2, UHC_NEW);
-        inventory.setItem(4, uhc);
-        inventory.setItem(6, arena);
+        inventory.setItem(3, uhc);
+        inventory.setItem(5, arena);
 
         player.openInventory(inventory);
     }
@@ -61,17 +56,7 @@ public class ServerSelector implements Listener {
         // Assuming you have bungee instance accessible here
         Integer playerCount = bungee.getServerPlayerCount(server);
 
-        if (server.equals("UHC_NEW")) {
-            if (!player.hasPermission(newUHCPermission)) {
-                item = new ItemStack(Material.BARRIER);
-                meta = item.getItemMeta();
-                lore.add(ChatColor.RED + "Server is under construction");
-            } else {
-                item = new ItemStack(material);
-                meta = item.getItemMeta();
-                lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
-            }
-        } else if (server.equals("Arena")) {
+        if (server.equals("Arena")) {
             item = new ItemStack(material);
             meta = item.getItemMeta();
             lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
@@ -131,14 +116,6 @@ public class ServerSelector implements Listener {
 
             if (serverName.equals("1.8 UHC")) {
                 serverName = "UHC";
-            }
-
-            if (serverName.equals("1.20 UHC")) {
-                if (!player.hasPermission(newUHCPermission)) {
-                    player.sendMessage(ChatColor.RED + "You do not have permission to join the 1.20 UHC.");
-                    return;
-                }
-                serverName = "UHC_NEW";
             }
 
             bungee.sendPlayerToServer(player, serverName);

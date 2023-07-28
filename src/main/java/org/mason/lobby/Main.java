@@ -72,5 +72,6 @@ public class Main extends JavaPlugin {
         // Initialize ServerSelector and register events
         ServerSelector serverSelector = new ServerSelector(bungee, upcomingMatchUtil);
         getServer().getPluginManager().registerEvents(serverSelector, this);
+
     }
 }

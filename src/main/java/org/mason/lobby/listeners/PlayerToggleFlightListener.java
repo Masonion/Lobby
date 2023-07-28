@@ -28,25 +28,35 @@ public class PlayerToggleFlightListener implements Listener {
         GameMode gameMode = player.getGameMode();
 
         if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
-            if (event.isFlying()) {
+            // Check if the player is trying to start flying and if there is any solid block within 5 units below them
+            boolean isBlockBelow = false;
+            for (int i = 1; i <= 3; i++) {
+                if (player.getLocation().clone().subtract(0, i, 0).getBlock().getType().isSolid()) {
+                    isBlockBelow = true;
+                    break;
+                }
+            }
+            if (event.isFlying() && isBlockBelow) {
                 event.setCancelled(true);
                 player.setAllowFlight(false);
                 player.setFlying(false);
-                // Double the X and Z directions (for further) and Y direction (for higher)
-                Vector jump = player.getLocation().getDirection().multiply(1).setY(1);
+                Vector jump = player.getLocation().getDirection().multiply(1.5).setY(1.5);
                 player.setVelocity(player.getVelocity().add(jump));
-
-                // Play the WOOSH sound
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 1F, 1F);
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (player.isValid()) {
-                            player.setAllowFlight(true);
+                if (player.isValid()) {
+                    // schedule enabling of flight in next server tick so the player can double jump again when they land
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (player.isValid()) {
+                                player.setAllowFlight(true);
+                            }
                         }
-                    }
-                }.runTaskLater(this.Lobby, 10L);
+                    }.runTask(Lobby);
+                }
+            } else {
+                event.setCancelled(true);
             }
         }
     }
