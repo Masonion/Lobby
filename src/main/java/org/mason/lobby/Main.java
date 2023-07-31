@@ -42,8 +42,8 @@ public class Main extends JavaPlugin {
 
         // Create the match hologram
         // You'll need to replace these coordinates with the location where you want the hologram
-        World world = Bukkit.getWorld("airlobby");
-        Location hologramLocation = new Location(world, 5, 88, 12.5);
+        World world = Bukkit.getWorld("world");
+        Location hologramLocation = new Location(world, 18, 95, -31.5);
         matchHologram = new MatchHologram(this, upcomingMatchUtil);
         matchHologram.showUpcomingMatches(hologramLocation);
 
@@ -64,7 +64,7 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new WeatherChangeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDropItemListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerToggleFlightListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerToggleFlightListener(), this);
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         bungee.startPlayerCountTask("UHC", "Arena");

@@ -21,5 +21,8 @@ public class PlayerMoveListener implements Listener {
             teleportLocation.setYaw(180);
             player.teleport(teleportLocation);
         }
+        if (!player.getAllowFlight() && player.isOnGround()) {
+            player.setAllowFlight(true);
+        }
     }
 }

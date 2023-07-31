@@ -16,13 +16,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerToggleFlightListener implements Listener {
 
-    private final Main Lobby;
-
-    public PlayerToggleFlightListener(Main Lobby) {
-        this.Lobby = Lobby;
+    public PlayerToggleFlightListener() {
     }
 
-    @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         GameMode gameMode = player.getGameMode();
@@ -43,18 +39,6 @@ public class PlayerToggleFlightListener implements Listener {
                 Vector jump = player.getLocation().getDirection().multiply(1.5).setY(1.5);
                 player.setVelocity(player.getVelocity().add(jump));
                 player.playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 1F, 1F);
-
-                if (player.isValid()) {
-                    // schedule enabling of flight in next server tick so the player can double jump again when they land
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (player.isValid()) {
-                                player.setAllowFlight(true);
-                            }
-                        }
-                    }.runTask(Lobby);
-                }
             } else {
                 event.setCancelled(true);
             }
