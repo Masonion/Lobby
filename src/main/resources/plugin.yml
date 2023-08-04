@@ -3,18 +3,13 @@ version: 1.0
 main: org.mason.lobby.Main
 depend: [Citizens, HolographicDisplays]
 commands:
-  playercount:
-    description: Display the player count on each connected server.
-    usage: /playercount
   arena:
-    description: Arena command
+    description: Arena server command.
   uhc:
-    description: UHC command
-  mnpc:
-    description: NPC command
-  listnpcs:
-    description: List NPCs command
-  deletenpc:
-     description: Delete NPC command
+    description: UHC server command.
   upcomingmatch:
     description: Displays upcoming matches.
+  setspawn:
+    description: Set the spawn location.
+  matchhologram:
+    description: Set the match hologram location.

@@ -17,11 +17,11 @@ import java.util.Random;
 
 public class PlayerJoinListener implements Listener {
 
-    private final Main Lobby;
+    private final Main plugin;
     private final ServerScoreboard serverScoreboard;
 
-    public PlayerJoinListener(Main Lobby, ServerScoreboard serverScoreboard) {
-        this.Lobby = Lobby;
+    public PlayerJoinListener(Main plugin, ServerScoreboard serverScoreboard) {
+        this.plugin = plugin;
         this.serverScoreboard = serverScoreboard;
     }
 
@@ -31,25 +31,22 @@ public class PlayerJoinListener implements Listener {
 
         giveClock(player);
 
-        // Get "world" from the server
-        World world = Bukkit.getServer().getWorld("world");
+        // Load spawn location from ConfigManager
+        Location spawnLocation = plugin.getConfigManager().loadSpawnLocation();
 
-        // Check if the world is null
-        if(world == null) {
-            player.sendMessage(ChatColor.RED + "The world \"world\" does not exist!");
+        // Check if spawnLocation is null (not set)
+        if (spawnLocation == null) {
+            player.sendMessage(ChatColor.RED + "Spawn location is not set!");
             return;
         }
 
-        Location teleportLocation = new Location(world, 18, 94, -48);
-        player.teleport(teleportLocation);
-
-        teleportLocation.setYaw(0);
-        player.teleport(teleportLocation);
+        // Teleport the player to spawn location
+        player.teleport(spawnLocation);
 
         player.setWalkSpeed(0.2f);
         player.setAllowFlight(true);
 
-      //  serverScoreboard.showServerScoreboard(player);
+        serverScoreboard.showServerScoreboard(player);
     }
 
     private void giveClock(Player player) {

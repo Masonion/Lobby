@@ -4,6 +4,7 @@
     <root id="archive" name="Lobby.jar">
       <element id="module-output" name="Lobby" />
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/config.yml" />
     </root>
   </artifact>
 </component>

@@ -68,37 +68,40 @@ public class ServerScoreboard {
         // Register a new repeating task using Bukkit's scheduler.
         // This task will run every 30 seconds (20 ticks, since 1 second is approximately 20 ticks).
         Bukkit.getScheduler().runTaskTimerAsynchronously(lobby, () -> {
-            // Update the suffixes of the teams here.
-            uhcTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("UHC")));
-            arenaTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("Arena")));
-            totalTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getTotalPlayerCount()));
+            // Check if the player is still online.
+            if (Bukkit.getPlayer(player.getUniqueId()) != null) {
+                // Update the suffixes of the teams here.
+                uhcTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("UHC")));
+                arenaTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getServerPlayerCount("Arena")));
+                totalTeam.setSuffix(ChatColor.WHITE + Integer.toString(bungee.getTotalPlayerCount()));
 
-            // Fetch user from LuckPerms
-            User user = luckPerms.getUserManager().getUser(player.getUniqueId());
+                // Fetch user from LuckPerms
+                User user = luckPerms.getUserManager().getUser(player.getUniqueId());
 
-            // Get the prefix from the LuckPerms user
-            QueryOptions queryOptions = luckPerms.getContextManager().getQueryOptions(player);
-            String playerPrefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
-            if (playerPrefix == null) {
-                playerPrefix = "";
+                // Get the prefix from the LuckPerms user
+                QueryOptions queryOptions = luckPerms.getContextManager().getQueryOptions(player);
+                String playerPrefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
+                if (playerPrefix == null) {
+                    playerPrefix = "";
+                }
+
+                // Convert color codes
+                playerPrefix = ChatColor.translateAlternateColorCodes('&', playerPrefix);
+
+                // Only get the first color code from the prefix for the rank
+                String colorCode = ChatColor.getLastColors(playerPrefix);
+
+                // This gets the primary group of the user. Depending on your setup, you might need to change this to match your setup
+                String rank = user.getPrimaryGroup();
+
+                // Capitalize the first letter
+                if (!rank.isEmpty()) {
+                    rank = Character.toUpperCase(rank.charAt(0)) + rank.substring(1);
+                }
+
+                // Set the suffix of the rankTeam
+                rankTeam.setSuffix(colorCode + ChatColor.BOLD + rank);
             }
-
-            // Convert color codes
-            playerPrefix = ChatColor.translateAlternateColorCodes('&', playerPrefix);
-
-            // Only get the first color code from the prefix for the rank
-            String colorCode = ChatColor.getLastColors(playerPrefix);
-
-            // This gets the primary group of the user. Depending on your setup, you might need to change this to match your setup
-            String rank = user.getPrimaryGroup();
-
-            // Capitalize the first letter
-            if (!rank.isEmpty()) {
-                rank = Character.toUpperCase(rank.charAt(0)) + rank.substring(1);
-            }
-
-            // Set the suffix of the rankTeam
-            rankTeam.setSuffix(colorCode + ChatColor.BOLD + rank);
 
         }, 0L, 20L);
     }

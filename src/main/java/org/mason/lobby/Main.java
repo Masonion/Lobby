@@ -1,11 +1,7 @@
 package org.mason.lobby;
 
-import net.citizensnpcs.Citizens;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mason.lobby.Data.NPCDataStore;
 import org.mason.lobby.commands.*;
 import org.mason.lobby.listeners.*;
 import org.mason.lobby.util.*;
@@ -13,8 +9,8 @@ import org.mason.lobby.util.*;
 public class Main extends JavaPlugin {
     private final Bungee bungee;
     private ServerScoreboard serverScoreboard;
-    private Citizens citizens;
     private MatchHologram matchHologram;
+    private ConfigManager configManager;
 
     public Main() {
         bungee = new Bungee(this);
@@ -22,42 +18,27 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Ensure that the Citizens plugin is loaded
-        if (getServer().getPluginManager().getPlugin("Citizens") == null) {
-            getLogger().severe("Citizens 2.0 not found or not enabled");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        Citizens citizens = (Citizens) getServer().getPluginManager().getPlugin("Citizens");
-
-        // Initialize the ScoreboardUtil
+        configManager = new ConfigManager(this);
         ScoreboardUtil.initialize();
-
-        // Initialize the ServerScoreboard instance
         serverScoreboard = new ServerScoreboard(bungee, this);
 
         UpcomingMatchUtil upcomingMatchUtil = new UpcomingMatchUtil();
         this.getCommand("upcomingmatch").setExecutor(new UpcomingMatchCommand(upcomingMatchUtil));
 
-        // Create the match hologram
-        // You'll need to replace these coordinates with the location where you want the hologram
-        World world = Bukkit.getWorld("world");
-        Location hologramLocation = new Location(world, 18, 95, -31.5);
+        Location hologramLocation = configManager.loadHologramLocation();
         matchHologram = new MatchHologram(this, upcomingMatchUtil);
-        matchHologram.showUpcomingMatches(hologramLocation);
+        if(hologramLocation != null) {
+            matchHologram.showUpcomingMatches(hologramLocation);
+        }
+
+        getCommand("matchhologram").setExecutor(new MatchHologramCommand(this, matchHologram));
+        getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
 
         getCommand("arena").setExecutor(new ArenaCommand(this));
         getCommand("uhc").setExecutor(new UHCCommand(this));
 
         // Initialize NPCDataStore
-        NPCDataStore npcDataStore = new NPCDataStore(this);
 
-        getCommand("mnpc").setExecutor(new NPCCommand(citizens, npcDataStore));
-        getCommand("listnpcs").setExecutor(new ListNPCsCommand(citizens, npcDataStore));
-        getCommand("deletenpc").setExecutor(new DeleteNPCCommand(citizens, npcDataStore));
-
-        getServer().getPluginManager().registerEvents(new NPCClickListener(bungee, npcDataStore), this);
 
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this, serverScoreboard), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
@@ -72,6 +53,8 @@ public class Main extends JavaPlugin {
         // Initialize ServerSelector and register events
         ServerSelector serverSelector = new ServerSelector(bungee, upcomingMatchUtil);
         getServer().getPluginManager().registerEvents(serverSelector, this);
-
+    }
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }

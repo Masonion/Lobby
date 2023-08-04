@@ -13,12 +13,12 @@ import org.bukkit.Effect;
 
 
 import org.bukkit.scheduler.BukkitRunnable;
-
 public class PlayerToggleFlightListener implements Listener {
 
     public PlayerToggleFlightListener() {
     }
 
+    @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         GameMode gameMode = player.getGameMode();
