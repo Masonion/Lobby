@@ -8,8 +8,8 @@ public class WeatherChangeListener implements Listener {
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {
-        if (event.toWeatherState()) { // If the weather is changing to raining or snowing
-            event.setCancelled(true); // Cancel the event to keep the weather clear (sunny)
+        if (event.toWeatherState()) {
+            event.setCancelled(true);
         }
     }
 }

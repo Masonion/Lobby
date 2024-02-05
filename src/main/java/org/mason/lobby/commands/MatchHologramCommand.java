@@ -33,7 +33,6 @@ public class MatchHologramCommand implements CommandExecutor {
             return true;
         }
 
-        // Set the hologram location to the player's location
         Location newLocation = player.getLocation();
         matchHologram.showUpcomingMatches(newLocation);
         plugin.getConfigManager().saveHologramLocation(newLocation);

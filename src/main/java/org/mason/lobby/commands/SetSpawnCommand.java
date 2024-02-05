@@ -25,7 +25,6 @@ public class SetSpawnCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (player.hasPermission("akurra.admin")) {
-            // Set the spawn location to the player's location
             Location newLocation = player.getLocation();
             plugin.getConfigManager().saveSpawnLocation(newLocation);
             player.sendMessage("Spawn location set to your current location.");

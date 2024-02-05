@@ -11,11 +11,11 @@ import org.bukkit.ChatColor;
 
 public class UpcomingMatchUtil {
     private Connection connection;
-    private static final String HOST = "51.161.199.97";
-    private static final int PORT = 3306;
-    private static final String DATABASE = "s4_UHCCalendar";
-    private static final String USERNAME = "u4_aFDkHJQiHS";
-    private static final String PASSWORD = "P0Y^JXeUN9.3XqR.M.JBNjX8";
+    private static final String HOST = "************";
+    private static final int PORT = ****;
+    private static final String DATABASE = "************";
+    private static final String USERNAME = "************";
+    private static final String PASSWORD = "************";
 
     public UpcomingMatchUtil() {
         try {
@@ -79,26 +79,22 @@ public class UpcomingMatchUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         sdf.setTimeZone(tz);
 
-        long currentTime = System.currentTimeMillis() / 1000L; // Current time in seconds
-        long timeDifference = unixTime - currentTime; // Time difference in seconds
+        long currentTime = System.currentTimeMillis() / 1000L;
+        long timeDifference = unixTime - currentTime;
 
         Calendar matchTime = Calendar.getInstance();
-        matchTime.setTimeInMillis(unixTime * 1000);  // unixTime is in seconds, convert it to milliseconds
+        matchTime.setTimeInMillis(unixTime * 1000);
 
         String formattedTime = sdf.format(matchTime.getTime());
         String timeRemaining = "";
 
         if (timeDifference < 0) {
-            // Game has started
             long timeSinceStart = Math.abs(timeDifference);
             if (timeSinceStart < 60) {
-                // Less than a minute
                 timeRemaining = timeSinceStart + " seconds since start";
             } else if (timeSinceStart < 3600) {
-                // Less than an hour but more than a minute
                 timeRemaining = timeSinceStart / 60 + " minutes since start";
             } else {
-                // Hour or more
                 long hours = timeSinceStart / 3600;
                 long minutes = (timeSinceStart % 3600) / 60;
                 timeRemaining = (hours > 0 ? hours + " hour" + (hours > 1 ? "s" : "") : "")
@@ -107,13 +103,10 @@ public class UpcomingMatchUtil {
                         + " since start";
             }
         } else if (timeDifference < 60) {
-            // Less than a minute
             timeRemaining = timeDifference + " seconds";
         } else if (timeDifference < 3600) {
-            // Less than an hour but more than a minute
             timeRemaining = timeDifference / 60 + " minutes";
         } else {
-            // Hour or more
             long hours = timeDifference / 3600;
             long minutes = (timeDifference % 3600) / 60;
             timeRemaining = (hours > 0 ? hours + " hour" + (hours > 1 ? "s" : "") : "")
@@ -125,7 +118,7 @@ public class UpcomingMatchUtil {
     }
 
     private List<String> formatScenarios(String scenarios) {
-        String[] scenarioArray = scenarios.split(","); // Assuming scenarios are comma-separated
+        String[] scenarioArray = scenarios.split(",");
         List<String> formattedScenarios = new ArrayList<>();
 
         int lineLength = 0;
@@ -138,7 +131,6 @@ public class UpcomingMatchUtil {
                 }
                 line.append(scenario.trim());
 
-                // If this is not the last scenario in the line, append a comma
                 if (lineLength == 1 && i != scenarioArray.length - 1) {
                     line.append(",");
                 }
@@ -151,7 +143,6 @@ public class UpcomingMatchUtil {
             }
         }
 
-        // Add the last line if it isn't empty
         if (line.length() > 0) {
             formattedScenarios.add(line.toString());
         }

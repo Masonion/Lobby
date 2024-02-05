@@ -1,5 +1,7 @@
 package org.mason.lobby.listeners;
 
+import net.akurra.akurrachat.AkurraChat;
+import net.akurra.akurrachat.PlayerSettings;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,8 +25,14 @@ public class PlayerToggleFlightListener implements Listener {
         Player player = event.getPlayer();
         GameMode gameMode = player.getGameMode();
 
+        if (player.hasPermission("akurra.supporter")) {
+            PlayerSettings settings = AkurraChat.getInstance().getPlayerSettings(player.getUniqueId());
+            if (settings.getFly()) {
+                return;
+            }
+        }
+
         if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
-            // Check if the player is trying to start flying and if there is any solid block within 5 units below them
             boolean isBlockBelow = false;
             for (int i = 1; i <= 3; i++) {
                 if (player.getLocation().clone().subtract(0, i, 0).getBlock().getType().isSolid()) {

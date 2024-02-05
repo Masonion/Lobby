@@ -20,8 +20,8 @@ public class ArenaCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (command.getName().equalsIgnoreCase("arena")) {
-                Bungee bungee = new Bungee(lobby); // create an instance of Bungee with Lobby instance
-                bungee.sendPlayerToServer(player, arenaServerName); // call the method
+                Bungee bungee = new Bungee(lobby);
+                bungee.sendPlayerToServer(player, arenaServerName);
                 return true;
             }
         } else {

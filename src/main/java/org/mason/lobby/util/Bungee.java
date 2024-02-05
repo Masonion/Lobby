@@ -62,7 +62,7 @@ public class Bungee implements PluginMessageListener {
                 servers.put(server, playerCount);
 
                 if (server.equals("ALL")) {
-                    servers.put("ALL", playerCount); // Store the total player count
+                    servers.put("ALL", playerCount);
                 }
             }
         } catch (IOException e) {
@@ -77,8 +77,8 @@ public class Bungee implements PluginMessageListener {
                 for (String serverName : serverNames) {
                     getPlayerCount(serverName);
                 }
-                getPlayerCount("ALL"); // Request total player count
+                getPlayerCount("ALL");
             }
-        }.runTaskTimer(lobby, 0L, 20L);  // 20 ticks/second * 30 seconds = 600 ticks
+        }.runTaskTimer(lobby, 0L, 20L);
     }
 }

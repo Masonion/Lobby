@@ -12,6 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.mason.lobby.Main;
 import org.mason.lobby.util.ServerScoreboard;
+import org.mason.lobby.util.ServerSelector;
+import org.mason.lobby.util.SettingsSelector;
 
 import java.util.Random;
 
@@ -29,18 +31,15 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        giveClock(player);
+        giveItems(player);
 
-        // Load spawn location from ConfigManager
         Location spawnLocation = plugin.getConfigManager().loadSpawnLocation();
 
-        // Check if spawnLocation is null (not set)
         if (spawnLocation == null) {
             player.sendMessage(ChatColor.RED + "Spawn location is not set!");
             return;
         }
 
-        // Teleport the player to spawn location
         player.teleport(spawnLocation);
 
         player.setWalkSpeed(0.2f);
@@ -49,11 +48,8 @@ public class PlayerJoinListener implements Listener {
         serverScoreboard.showServerScoreboard(player);
     }
 
-    private void giveClock(Player player) {
-        ItemStack clock = new ItemStack(Material.WATCH);
-        ItemMeta clockMeta = clock.getItemMeta();
-        clockMeta.setDisplayName(ChatColor.GREEN + "Server Selector");
-        clock.setItemMeta(clockMeta);
-        player.getInventory().setItem(4, clock);
+    private void giveItems(Player player) {
+        player.getInventory().setItem(4, ServerSelector.getServerSelectorItem());
+        player.getInventory().setItem(8, SettingsSelector.getSettingsItem());
     }
 }

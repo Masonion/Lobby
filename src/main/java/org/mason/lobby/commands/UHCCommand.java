@@ -20,8 +20,8 @@ public class UHCCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (command.getName().equalsIgnoreCase("uhc")) {
-                Bungee bungee = new Bungee(lobby); // create an instance of Bungee with Lobby instance
-                bungee.sendPlayerToServer(player, uhcServerName); // call the method
+                Bungee bungee = new Bungee(lobby);
+                bungee.sendPlayerToServer(player, uhcServerName);
                 return true;
             }
         } else {

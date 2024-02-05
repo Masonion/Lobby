@@ -1,7 +1,11 @@
 package org.mason.lobby;
 
+import net.akurra.akurrachat.AkurraChat;
+import net.akurra.akurrachat.PlayerSettings;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.mason.lobby.commands.*;
 import org.mason.lobby.listeners.*;
 import org.mason.lobby.util.*;
@@ -37,9 +41,6 @@ public class Main extends JavaPlugin {
         getCommand("arena").setExecutor(new ArenaCommand(this));
         getCommand("uhc").setExecutor(new UHCCommand(this));
 
-        // Initialize NPCDataStore
-
-
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this, serverScoreboard), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
@@ -47,12 +48,33 @@ public class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDropItemListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerToggleFlightListener(), this);
 
+
+        ServerSelector serverSelector = new ServerSelector(bungee, upcomingMatchUtil);
+
+        getServer().getPluginManager().registerEvents(serverSelector, this);
+        getServer().getPluginManager().registerEvents(new SettingsSelector(), this);
+
+
+
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         bungee.startPlayerCountTask("UHC", "Arena");
 
-        // Initialize ServerSelector and register events
-        ServerSelector serverSelector = new ServerSelector(bungee, upcomingMatchUtil);
-        getServer().getPluginManager().registerEvents(serverSelector, this);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player player : getServer().getOnlinePlayers()) {
+                    if (player.hasPermission("akurra.supporter")) {
+                        PlayerSettings settings = AkurraChat.getInstance().getPlayerSettings(player.getUniqueId());
+                        if (!settings.getFly()) {
+                            player.setFlying(false);
+                        }
+                    }
+                    else {
+                        player.setFlying(false);
+                    }
+                }
+            }
+        }.runTaskTimer(this, 0L, 10L);
     }
     public ConfigManager getConfigManager() {
         return configManager;

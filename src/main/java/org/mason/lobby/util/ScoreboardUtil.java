@@ -16,7 +16,6 @@ public class ScoreboardUtil {
     private static Team defaultTeam = null;
 
     public static void initialize() {
-        // Force remove this old DEFAULT_TEAM_NAME (bug should never have been added)
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         Team team = scoreboard.getTeam(ScoreboardUtil.DEFAULT_TEAM_NAME);
         if (team != null) {
@@ -33,7 +32,6 @@ public class ScoreboardUtil {
         player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         Team team = ScoreboardUtil.addPlayerToDefaultTeam(player.getScoreboard(), player);
 
-        // Have to add every player to this new scoreboard :'(
         for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
             team.addPlayer(pl);
         }

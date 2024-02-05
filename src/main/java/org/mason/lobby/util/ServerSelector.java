@@ -18,7 +18,7 @@ import java.util.List;
 public class ServerSelector implements Listener {
 
     private final Bungee bungee;
-    private final String arenaPermission = "lobby.arena.join"; // Define the permission for joining the arena
+    private final String arenaPermission = "lobby.arena.join";
     private final UpcomingMatchUtil upcomingMatchUtil;
 
     public ServerSelector(Bungee bungee, UpcomingMatchUtil upcomingMatchUtil) {
@@ -26,11 +26,23 @@ public class ServerSelector implements Listener {
         this.upcomingMatchUtil = upcomingMatchUtil;
     }
 
+    public static ItemStack getServerSelectorItem() {
+        ItemStack clock = new ItemStack(Material.WATCH);
+        ItemMeta clockMeta = clock.getItemMeta();
+        clockMeta.setDisplayName(ChatColor.GREEN + "Server Selector");
+        clock.setItemMeta(clockMeta);
+
+        return clock;
+    }
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (item != null && item.getType() == Material.WATCH) {
-            openServerSelector(event.getPlayer());
+        if (item != null && item.getType() == Material.WATCH && item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName() && meta.getDisplayName().equals(ChatColor.GREEN + "Server Selector")) {
+                openServerSelector(event.getPlayer());
+            }
         }
     }
 
@@ -53,7 +65,6 @@ public class ServerSelector implements Listener {
         ItemMeta meta;
         String currentMatches = upcomingMatchUtil.checkUpcomingGamesAndPrint();
         List<String> lore = new ArrayList<>();
-        // Assuming you have bungee instance accessible here
         Integer playerCount = bungee.getServerPlayerCount(server);
 
         if (server.equals("Arena")) {
@@ -66,7 +77,6 @@ public class ServerSelector implements Listener {
             lore.add(ChatColor.GRAY + "Online: " + ChatColor.WHITE + playerCount);
             lore.add("");
             lore.add(ChatColor.BLUE.toString() + ChatColor.BOLD + "Upcoming Game:");
-            // If currentMatches is null or empty, set it to "No upcoming matches"
             if (currentMatches == null || currentMatches.isEmpty()) {
                 lore.add(ChatColor.RED + "No upcoming matches at the moment.");
             } else {
